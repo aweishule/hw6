@@ -1,0 +1,44 @@
+clear;
+I=imread('D:\study\dip\第6次作业\lena.bmp');
+figure(1)
+subplot(1,2,1);
+imshow(I);
+
+f=double(I);
+title('lena original');
+%imwrite(I,'test1 original.bmp');
+[P,Q]=size(I);
+ib=padarray(I,[P Q],'POST');%填充
+
+i=double(ib);
+H=zeros(2*P,2*Q);
+D=zeros(2*P,2*Q);
+G=zeros(2*P,2*Q);
+F=fft2(i);
+F=fftshift(F);
+a=0.01;
+b=0.01;
+T=1;
+[P1,Q1]=size(ib);
+for u=1:P1
+    for v=1:Q1
+        
+        H(u,v)=(T/(pi*(u*a+v*b)))*sin(pi*(u*a+v*b))*exp(-sqrt(-1)*pi*(u*a+v*b));
+        G(u,v)=H(u,v)*F(u,v);
+    end
+end
+
+g=ifftshift(G);
+g=ifft2(g);
+g=abs(255.*g./max(max(g)));
+g=uint8(real(g));
+g1=g(1:P,1:Q);
+subplot(1,2,2);
+imshow(g1);
+title('lena模糊滤波器');
+
+g2=imnoise(g1,'gaussian',0,10*10/(255*255));
+figure(2);
+imshow(g2);
+imwrite(g2,'lenamohu+gauss.bmp');
+title('lena mohu guass noise');

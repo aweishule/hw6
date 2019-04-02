@@ -1,0 +1,14 @@
+clear;
+I=imread('lenamohu+gauss.bmp');
+figure(1)
+subplot(1,2,1);
+imshow(I);
+title('lenamohu+gauss');
+h=fspecial('motion',50,40);
+I1=imfilter(I,h,'circular','conv');
+v=0.0001;
+noisepower=v*prod(size(I));
+[g,lagra]=deconvreg(I1,h,noisepower);
+subplot(1,2,2);
+imshow(g);
+title('×îÐ¡¶þ³Ë');

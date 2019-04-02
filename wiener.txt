@@ -1,0 +1,39 @@
+clear;
+I=imread('lenamohu+gauss.bmp');
+figure(1)
+subplot(1,2,1);
+imshow(I);
+
+f=double(I);
+title('lena original');
+%imwrite(I,'test1 original.bmp');
+[P,Q]=size(I);
+ib=padarray(I,[P Q],'POST');%Моід
+
+i=double(ib);
+H=zeros(2*P,2*Q);
+D=zeros(2*P,2*Q);
+G=zeros(2*P,2*Q);
+F=fft2(i);
+F=fftshift(F);
+a=0.01;
+b=0.01;
+T=1;
+k=0.001;
+[P1,Q1]=size(ib);
+for u=1:P1
+    for v=1:Q1
+        
+        H(u,v)=(T/(pi*(u*a+v*b)))*sin(pi*(u*a+v*b))*exp(-sqrt(-1)*pi*(u*a+v*b));
+        G(u,v)=(1/H(u,v))*(abs(H(u,v))^2/(abs(H(u,v))^2+k))*F(u,v);
+    end
+end
+
+g=ifftshift(G);
+g=ifft2(g);
+g=abs(255.*g./max(max(g)));
+g=uint8(real(g));
+g1=g(1:P,1:Q);
+subplot(1,2,2);
+imshow(g1);
+title('lena wiener');

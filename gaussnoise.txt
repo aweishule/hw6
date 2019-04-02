@@ -1,0 +1,40 @@
+clear
+I=imread('D:\study\dip\第6次作业\lena.bmp');
+figure(1)
+subplot(2,2,1);
+imshow(I);
+title('lena original');
+I2=imnoise(I,'gaussian',0,0.01);
+subplot(2,2,2);
+imshow(I2);
+title('lena guass noise');
+
+[x,y]=size(I);
+
+n2=5;
+
+
+m2=ones(n2,n2);
+
+I1=double(I2);
+I3=double(I2);
+for i=3:x-2
+    for j=3:y-2
+        m2=I1(i-2:i+2,j-2:j+2);
+        m2=sort(m2);
+        I3(i,j)=m2((n2*n2+1)/2);
+    end
+end
+Z1=uint8(I3);
+subplot(2,2,3);
+imshow(Z1);
+title('中值5x5');
+
+I4=double(I2);
+n=5;
+h=1/n^2.*ones(n,n);
+i2=conv2(I4,h,'same');
+i2=uint8(i2);
+subplot(2,2,4);
+imshow(i2);
+title('算数均值');
